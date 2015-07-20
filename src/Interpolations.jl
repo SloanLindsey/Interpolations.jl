@@ -4,6 +4,7 @@ export
     interpolate,
     interpolate!,
     extrapolate,
+    scale,
 
     gradient!,
 
@@ -22,10 +23,11 @@ export
     # see the following files for further exports:
     # b-splines/b-splines.jl
     # extrapolation/extrapolation.jl
+    # scaling/scaling.jl
 
 using WoodburyMatrices, Ratios, AxisAlgorithms
 
-import Base: convert, size, getindex, gradient, promote_rule
+import Base: convert, size, getindex, gradient, scale, promote_rule
 
 abstract InterpolationType
 immutable NoInterp <: InterpolationType end
@@ -36,7 +38,8 @@ immutable OnCell <: GridType end
 typealias DimSpec{T} Union(T,Tuple{Vararg{Union(T,NoInterp)}},NoInterp)
 
 abstract AbstractInterpolation{T,N,IT<:DimSpec{InterpolationType},GT<:DimSpec{GridType}} <: AbstractArray{T,N}
-abstract AbstractExtrapolation{T,N,ITPT,IT,GT} <: AbstractInterpolation{T,N,IT,GT}
+abstract AbstractInterpolationWrapper{T,N,ITPT,IT,GT} <: AbstractInterpolation{T,N,IT,GT}
+abstract AbstractExtrapolation{T,N,ITPT,IT,GT} <: AbstractInterpolationWrapper{T,N,ITPT,IT,GT}
 
 abstract BoundaryCondition
 immutable Flat <: BoundaryCondition end
@@ -62,5 +65,6 @@ include("nointerp/nointerp.jl")
 include("b-splines/b-splines.jl")
 include("gridded/gridded.jl")
 include("extrapolation/extrapolation.jl")
+include("scaling/scaling.jl")
 
 end # module
