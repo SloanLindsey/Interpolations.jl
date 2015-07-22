@@ -5,6 +5,8 @@ include("error.jl")
 
 include("constant.jl")
 
+include("reflect.jl")
+
 include("indexing.jl")
 
 include("filled.jl")
