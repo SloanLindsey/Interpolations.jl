@@ -31,4 +31,12 @@ etpf = @inferred(FilledInterpolation(itpg, 'x'))
 @test_approx_eq etpf[2] f(2)
 @test etpf[-1.5] == 'x'
 
+etpl = extrapolate(itpg, Linear)
+k_lo = A[2] - A[1]
+x_lo = -3.2
+@test_approx_eq etpl[x_lo] A[1]+k_lo*(x_lo-1)
+k_hi = A[end] - A[end-1]
+x_hi = xmax + 5.7
+@test_approx_eq etpl[x_hi] A[end]+k_hi*(x_hi-xmax)
+
 end

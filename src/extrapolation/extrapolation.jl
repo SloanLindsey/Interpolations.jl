@@ -3,6 +3,7 @@ export Throw,
 
 include("error.jl")
 include("constant.jl")
+include("linear.jl")
 include("reflect.jl")
 include("periodic.jl")
 include("indexing.jl")

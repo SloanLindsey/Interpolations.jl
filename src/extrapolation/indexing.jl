@@ -1,4 +1,4 @@
-@generated function getindex{T,N,ITP,GT}(etp::AbstractExtrapolation{T,N,ITP,GT}, xs...)
+@generated function getindex{T,N}(etp::AbstractExtrapolation{T,N}, xs...)
     quote
         $(extrap_prep(etp, xs...))
         itp = etp.itp
