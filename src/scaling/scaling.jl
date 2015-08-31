@@ -16,8 +16,8 @@ end
 
 size(sitp::ScaledInterpolation, d) = size(sitp.itp, d)
 
-coordlookup(r::FloatRange, x) = (r.divisor * x - r.start) ./ r.step + 1.0
-coordlookup(r::StepRange, x) = (x - r.start) ./ r.step + 1.0
-coordlookup(r::UnitRange, x) = x - r.start + 1
+coordlookup(r::FloatRange, x) = (r.divisor * x - r.start) ./ r.step + one(eltype(r))
+coordlookup(r::StepRange, x) = (x - r.start) ./ r.step + one(eltype(r))
+coordlookup(r::UnitRange, x) = x - r.start + one(eltype(r))
 coordlookup{N}(r::NTuple{N}, x::NTuple{N}) = map(coordlookup,r,x)
 
