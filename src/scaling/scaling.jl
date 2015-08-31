@@ -21,3 +21,21 @@ coordlookup(r::StepRange, x) = (x - r.start) ./ r.step + one(eltype(r))
 coordlookup(r::UnitRange, x) = x - r.start + one(eltype(r))
 coordlookup{N}(r::NTuple{N}, x::NTuple{N}) = map(coordlookup,r,x)
 
+gradient{T,N}(sitp::ScaledInterpolation{T,N}, xs...) = gradient!(Array(T,N), sitp, xs...)
+@generated function gradient!{T,N}(g, sitp::ScaledInterpolation{T,N}, xs...)
+    ndims(g) == 1 || error(string("g must be a vector (but had ", ndims(g), " dimensions)"))
+    length(xs) == N || error(string("Must index into ScaledInterpolation{", N, "} with exactly ", N, " indices (you used ", length(xs), ")"))
+
+    quote
+        length(g) == N || error(string("g must be a vector of length ", N, " (was ", length(g), ")"))
+        gradient!(g, sitp.itp, coordlookup(sitp.ranges, tuple(xs...))...)
+        for i in eachindex(g)
+            g[i] = rescale_gradient(sitp.ranges[i], g[i])
+        end
+        g
+    end
+end
+
+rescale_gradient(r::FloatRange, g) = g * r.divisor / r.step
+rescale_gradient(r::StepRange, g) = g / r.step
+rescale_gradient(r::UnitRange, g) = g

@@ -30,4 +30,15 @@ for x in xs, y in ys
     @test_approx_eq f(x,y) sitp2[x,y]
 end
 
+# Test gradients of scaled grids
+xs = -pi:.1:pi
+ys = sin(xs)
+itp = interpolate(ys, BSpline(Linear), OnGrid)
+sitp = scale(itp, xs)
+
+for x in -pi:.1:pi
+	g = gradient(sitp, x)[1]
+	@test_approx_eq_eps cos(x) g .05
+end
+
 end
