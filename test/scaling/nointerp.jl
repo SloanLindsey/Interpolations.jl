@@ -29,6 +29,8 @@ end
 Test.with_handler(message_is("NoInterp dimension 2 must be scaled with unit range 1:3")) do
 	@test scale(itp, xs, -1:1)
 end
-
+Test.with_handler(message_is("Must index into 2-dimensional scaled interpolation object with exactly 2 indices (you used 1)")) do
+	@test sitp[2.3]
 end
 
+end
